@@ -189,7 +189,7 @@ class WP_GitHub_Updater {
         $response = wp_remote_get($query);
     
         if (is_wp_error($response) || wp_remote_retrieve_response_code($response) != 200) {
-            write_log("WP_GitHub_Updater: Error fetching version from GitHub.", "true");
+            write_log("WP_GitHub_Updater: Error fetching version from GitHub.<br />URL: ".$query , "true");
             return false;
         }
     

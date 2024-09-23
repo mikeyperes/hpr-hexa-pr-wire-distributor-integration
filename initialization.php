@@ -1,4 +1,4 @@
-<?php namespace hpr_distributor;
+<?php
 /*
 Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
@@ -9,6 +9,7 @@ Author URI: https://michaelperes.com
 GitHub Plugin URI: https://github.com/mikeyperes/hws-base-tools/
 GitHub Branch: main 
 */          
+namespace hpr_distributor;
 
 
 // Ensure this file is being included by a parent file
@@ -227,5 +228,7 @@ add_action('acf/init', function() {
 
     include_once("settings-event-handling.php");
    // include_once("settings-dashboard.php");
+
+   include_once("activate-snippets.php");
 });
 ?>
