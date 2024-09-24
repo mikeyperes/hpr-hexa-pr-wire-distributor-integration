@@ -28,8 +28,6 @@ if (!function_exists(__NAMESPACE__ . '\\write_log')) {
 
 
 
-
-
 if (!function_exists(__NAMESPACE__ . '\\check_press_release_post_type_enabled')) {
     function check_press_release_post_type_enabled() {
         // Check if the press-release post type is registered
@@ -279,7 +277,7 @@ if (!function_exists(__NAMESPACE__ . '\\check_user_exists_by_slug')) {
         $user = get_user_by('slug', $slug);
         $exists = ($user) ? true : false;
         
-        write_log('Checking if user exists by slug: ' . $slug . ' - ' . ($exists ? 'Exists' : 'Does not exist'), true);
+        write_log('Checking if user exists by slug: ' . $slug . ' - ' . ($exists ? 'Exists' : 'Does not exist'), false);
         
         return $exists;
     }

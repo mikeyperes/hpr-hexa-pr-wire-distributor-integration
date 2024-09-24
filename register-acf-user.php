@@ -1,11 +1,8 @@
 <?php namespace hpr_distributor; 
 
 function register_user_custom_fields(){
-write_log("Me IN!!! ",true);
-		if ( ! function_exists( 'acf_add_local_field_group' ) ) {
-			return;
-		}
-	 
+		if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+		
 		acf_add_local_field_group( array(
 		'key' => 'group_590d64c31db0a',
 		'title' => 'Profile',

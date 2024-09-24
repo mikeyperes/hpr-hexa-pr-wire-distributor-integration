@@ -185,7 +185,7 @@ class WP_GitHub_Updater {
 	 * @return int $version the version number
 	 */
     public function get_new_version() {
-        $query = trailingslashit($this->config['raw_url']) . 'initialization.php';
+        $query = trailingslashit($this->config['raw_url']) . Config::$plugin_starter_file;
         $response = wp_remote_get($query);
     
         if (is_wp_error($response) || wp_remote_retrieve_response_code($response) != 200) {

@@ -3,10 +3,10 @@
 Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
 Author: Michael Peres
-Plugin URI: https://github.com/mikeyperes/hws-base-tools
-Version: 1.1
+Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor
+Version: 1.4
 Author URI: https://michaelperes.com
-GitHub Plugin URI: https://github.com/mikeyperes/hws-base-tools/
+GitHub Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor/
 GitHub Branch: main 
 */          
 namespace hpr_distributor;
@@ -19,39 +19,45 @@ defined('ABSPATH') or die('No script kiddies please!');
 include_once("generic-functions.php");
 
 // Define constants
+// Define constants
 class Config {
+    public static $plugin_name = "Hexa PR Wire - Distributor";
+    public static $plugin_starter_file = "initialization.php";
+
     public static $settings_page_name = "Hexa PR Wire - Settings";
     public static $settings_page_capability = "manage_options";
     public static $settings_page_slug = "hpr-distributor";
     public static $settings_page_display_title = "Hexa PR Wire - Settings";
+    
 
+    // Add this method to return the GitHub config dynamically
+    public static function get_github_config() {
+        return array(
+            'slug' => plugin_basename(__FILE__), // Plugin slug
+            'proper_folder_name' => 'hexa-pr-wire-distributor', // Proper folder name
+            'api_url' => 'https://api.github.com/repos/mikeyperes/hexa-pr-wire-distributor', // GitHub API URL
+            'raw_url' => 'https://raw.github.com/mikeyperes/hexa-pr-wire-distributor/main', // Raw GitHub URL
+            'github_url' => 'https://github.com/mikeyperes/hexa-pr-wire-distributor', // GitHub repository URL
+            'zip_url' => 'https://github.com/mikeyperes/hexa-pr-wire-distributor/archive/main.zip', // Zip URL for the latest version
+            'sslverify' => true, // SSL verification for the download
+            'requires' => '5.0', // Minimum required WordPress version
+            'tested' => '1.1', // Tested up to WordPress version
+            'readme' => 'README.md', // Readme file for version checking
+            'access_token' => '', // Access token if required
+        );
+    }
 }
+
 
 // Include the GitHub Updater class
 include_once("GitHub_Updater.php");
 
 // Use the WP_GitHub_Updater class
 use hpr_distributor\WP_GitHub_Updater;
-
+$config = null;
 // Initialize the updater
 if (is_admin()) { // Ensure this runs only in the admin area
-
-    $config = array(
-        'slug' => plugin_basename(__FILE__), // Plugin slug
-        'proper_folder_name' => 'hexa-pr-wire-distributor', // Proper folder name
-        'api_url' => 'https://api.github.com/repos/mikeyperes/hexa-pr-wire-distributor', // GitHub API URL
-        'raw_url' => 'https://raw.github.com/mikeyperes/hexa-pr-wire-distributors/main', // Raw GitHub URL
-        'github_url' => 'https://github.com/mikeyperes/hexa-pr-wire-distributor', // GitHub repository URL
-        'zip_url' => 'https://github.com/mikeyperes/hexa-pr-wire-distributor/archive/main.zip', // Zip URL for the latest version
-        'sslverify' => true, // SSL verification for the download
-        'requires' => '5.0', // Minimum required WordPress version
-        'tested' => '1.0' , // Tested up to WordPress version
-        'readme' => 'README.md', // Readme file for version checking
-        'access_token' => '', // Access token if required
-    );
-
-    $updater = new WP_GitHub_Updater($config);
-
+ $updater = new WP_GitHub_Updater(\hpr_distributor\Config::get_github_config());
     // Trigger an update check for debugging
     add_action('init', function() {
         if (is_admin() && isset($_GET['force-update-check'])) {
@@ -65,6 +71,8 @@ if (is_admin()) { // Ensure this runs only in the admin area
         }
     });
 }
+
+
 
 
 // Array of plugins to check
@@ -89,7 +97,7 @@ foreach ($plugins_to_check as $plugin) {
 // If none of the ACF plugins are active, display a warning and prevent the plugin from running
 if (!$acf_active) {
     add_action('admin_notices', function() {
-        echo '<div class="notice notice-error"><p><strong>HWS - Base Tools:</strong> The Advanced Custom Fields (ACF) or Advanced Custom Fields Pro (ACF Pro) plugin is required and must be active to use this plugin. Please activate ACF or ACF Pro.</p></div>';
+        echo '<div class="notice notice-error"><p><strong>'.\hpr_distributor\Config::$plugin_name.'</strong> The Advanced Custom Fields (ACF) or Advanced Custom Fields Pro (ACF Pro) plugin is required and must be active to use this plugin. Please activate ACF or ACF Pro.</p></div>';
     });
     return; // Stop further execution of the plugin
 }
@@ -245,6 +253,7 @@ add_action('acf/init', function() {
     include_once("register-acf-press-release.php");
     include_once("register-acf-user.php");
     // Build Dashboard
+    include_once("settings-dashboard-plugin-info.php");
     include_once("settings-dashboard-snippets.php");
     include_once("settings-dashboard-system-checks.php");
     include_once("settings-dashboard-plugin-checks.php");
