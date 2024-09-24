@@ -1,36 +1,35 @@
 <?php namespace hpr_distributor;
 
-use function hpr_distributor\modify_wp_config_constants;
-use function hpr_distributor\modify_wp_config_constants_handler;
-use function hpr_distributor\hws_ct_highlight_based_on_criteria;
-
-
-
-function modify_wp_config_constants_handler() {
-    if (!current_user_can('manage_options')) {
-        wp_send_json_error(['message' => 'Unauthorized']);
-    }
-
-    $constants = isset($_POST['constants']) ? $_POST['constants'] : [];
-    if (empty($constants)) {
-        wp_send_json_error(['message' => 'No constants provided']);
-    }
-
-    $result = modify_wp_config_constants($constants);
-
-    if ($result['status']) {
-        wp_send_json_success(['message' => $result['message']]);
-    } else {
-        wp_send_json_error(['message' => $result['message']]);
-    }
-}
-
-add_action('wp_ajax_modify_wp_config_constants', 'hws_base_tools\modify_wp_config_constants_handler');
-
 
 
 function hws_ct_get_settings_system_checks()
-{return [];
+{
+    
+    $system_checks = [
+        'Create Hexa PR Wire User' => [
+            'id' => 'wp-main-email',
+            'value' => hws_ct_highlight_based_on_criteria(check_if_user_hexa_pr_wire_exists())
+        ],  
+         'Check FIFU Setup' => [
+            'id' => 'fifu-setup',
+            'value' => hws_ct_highlight_based_on_criteria(check_fifu_setup())
+        ],
+        'Check Press Release post type active' => [
+            'id' => 'fifu-setup',
+            'value' => hws_ct_highlight_based_on_criteria(check_press_release_post_type_enabled())
+        ],
+        'Check Category Status' => [
+            'id' => 'fifu-setup',
+            'value' => hws_ct_highlight_based_on_criteria(check_press_release_categories_tags())
+        ],
+
+        
+        
+
+
+    ];
+
+        return $system_checks;
    
     $system_checks = [
         /*
@@ -39,7 +38,7 @@ function hws_ct_get_settings_system_checks()
     'value' => hws_ct_highlight_based_on_criteria(
         perform_comments_system_check() // Calls the function that checks the comment statuses
     ),
-],*/
+],*/ 
 
         'WordPress Admin Email' => [
             'id' => 'wp-main-email',
@@ -362,39 +361,7 @@ if ($wp_cache_status === 'true' || $wp_cache_status === true): ?>
         </div>
     </div>
 
-    <script>
-
-jQuery(document).ready(function($) {
-    $('.modify-wp-config').on('click', function(e) {
-        e.preventDefault();
-
-        const constant = $(this).data('constant');
-        const value = $(this).data('value');
-        const target = $(this).data('target');
-
-        $.post(ajaxurl, {
-            action: 'modify_wp_config_constants',
-            constants: {
-                [constant]: value
-            }
-        }, function(response) {
-            if (response.success) {
-                alert(response.data.message || 'Configuration updated successfully.');
-                location.reload();
-            } else {
-                alert(response.data.message || 'Failed to update configuration.');
-            }
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.error('AJAX Request Failed:', jqXHR, textStatus, errorThrown);
-            alert('AJAX request failed: ' + textStatus + ', ' + errorThrown);
-        });
-    });
-});
-
-
-
-
-</script>
+    
 <?php
 
 //add_action('wp_ajax_hws_ct_update_wp_config', 'hws_ct_update_wp_config');
@@ -403,82 +370,7 @@ jQuery(document).ready(function($) {
 ?>
 
 
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            // Event handler for enabling auto-updates for all plugins
-            $('#enable-plugin-auto-updates').on('click', function(e) {
-                e.preventDefault();
-
-                $.post(ajaxurl, {
-                    action: 'enable_plugin_auto_updates'
-                }, function(response) {
-                    if (response.success) {
-                        alert('Auto updates for all plugins have been enabled.');
-                        location.reload();
-                    } else {
-                        alert('Failed to enable auto updates for plugins: ' + response.data.message);
-                    }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('AJAX request failed: ' + textStatus + ', ' + errorThrown);
-                });
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            // Event handler for enabling WP Core auto-updates
-            $('#enable-auto-updates').on('click', function(e) {
-                e.preventDefault();
-
-                $.post(ajaxurl, {
-                    action: 'modify_wp_config_constants',
-                    constants: {
-                        'WP_AUTO_UPDATE_CORE': 'true'
-                    }
-                }, function(response) {
-                    if (response.success) {
-                        alert('Auto updates have been enabled.');
-                        location.reload();
-                    } else {
-                        alert('Failed to enable auto updates: ' + response.data.message);
-                    }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('AJAX request failed: ' + textStatus + ', ' + errorThrown);
-                });
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            $('.fix-ram-issue').on('click', function(e) {
-                e.preventDefault();
-
-                $.post(ajaxurl, {
-                    action: 'modify_wp_config_constants',  // This needs to match the action hook in your PHP code
-                    constants: {
-                        'WP_MEMORY_LIMIT': '4000M' // Adding the constant to update
-                    }
-                }, function(response) {
-                    console.log('Raw AJAX Response:', response); // Log the entire response
-                    console.log('Data Object:', response.data);   // Log the data object to see what's inside
-
-                    var message = response.data ? response.data.message : 'No message received';
-
-                    if (response.success) {
-                        alert(message);
-                        location.reload();
-                    } else {
-                        alert(message);
-                    }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('AJAX request failed: ' + textStatus + ', ' + errorThrown);
-                    console.error('AJAX Request Failed:', jqXHR, textStatus, errorThrown); // Debugging: Log the failure details
-                });
-            });
-        });
-    </script> 
+  
     <?php
     
 

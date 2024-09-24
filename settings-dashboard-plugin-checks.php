@@ -1,26 +1,7 @@
 <?php namespace hpr_distributor;
 
 // Import functions from the hws_base_tools namespace
-use function hws_base_tools\get_database_table_prefix;
-use function hws_base_tools\check_wordpress_main_email;
-use function hws_base_tools\check_imagick_available;
-use function hws_base_tools\get_constant_value_from_wp_config;
-use function hws_base_tools\check_cloudflare_active;
-use function hws_base_tools\check_php_type;
-use function hws_base_tools\check_php_handler;
-use function hws_base_tools\hws_ct_highlight_if_essential_setting_failed;
-use function hws_base_tools\check_myisam_tables;
-use function hws_base_tools\check_wordfence_notification_email;
-use function hws_base_tools\check_wp_config_constant_status;
-use function hws_base_tools\check_log_file_sizes;
-use function hws_base_tools\check_smtp_auth_status_and_mailer;
-use function hws_base_tools\check_redis_active;
-use function hws_base_tools\check_caching_source;
-use function hws_base_tools\check_wordpress_memory_limit;
-use function hws_base_tools\check_server_memory_limit;
-use function hws_base_tools\check_server_specs;
-use function hws_base_tools\is_plugin_auto_update_enabled;
- 
+
  
 function display_settings_check_plugins() {
    // Get the last time WordPress checked for plugin updates
@@ -217,7 +198,17 @@ function hws_ct_get_plugins_list() {
             ],
             'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('rss-feed-post-generator-echo/rss-feed-post-generator-echo.php', 'Echo RSS Feed',true)
         ],
-
+        
+        [
+            'id' => 'featured-image-from-url/featured-image-from-url.php',
+            'name' => 'Featured Image From URL',
+            'approved_constraints' => [
+                'is_installed' => true,
+                'is_active' => true,
+                'is_auto_update_enabled' => true
+            ],
+            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('featured-image-from-url/featured-image-from-url.php', 'Featured Image From URL')
+        ],
         [
             'id' => 'wp-optimize/wp-optimize.php',
             'name' => 'WP Optimize',
@@ -237,37 +228,6 @@ function hws_ct_get_plugins_list() {
                 'is_auto_update_enabled' => true
             ],
             'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('hws-base-tools/initialization.php', 'HWS Base Tools')
-        ],
-        [
-            'id' => 'wp-smush-pro/wp-smush.php',
-            'name' => 'Smush Pro',
-            'approved_constraints' => [
-                'is_installed' => true,
-                'is_active' => true,
-                'is_auto_update_enabled' => true
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('wp-smush-pro/wp-smush.php', 'Smush Pro', true)
-        ],
-        
-        [
-            'id' => 'litespeed-cache/litespeed-cache.php',
-            'name' => 'LiteSpeed Cache',
-            'approved_constraints' => [
-                'is_installed' => true,
-                'is_active' => true,
-                'is_auto_update_enabled' => true
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('litespeed-cache/litespeed-cache.php', 'LiteSpeed Cache')
-        ],
-        [
-            'id' => 'wp-file-manager/file_folder_manager.php',
-            'name' => 'WP File Manager',
-            'approved_constraints' => [
-                'is_installed' => false,
-                'is_active' => false,
-                'is_auto_update_enabled' => false
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('wp-file-manager/wp-file-manager.php', 'WP File Manager')
         ],
         [
             'id' => 'elementor/elementor.php',
@@ -301,26 +261,6 @@ function hws_ct_get_plugins_list() {
             'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('media-cleaner/media-cleaner.php', 'Media Cleaner', true)
         ],
         [
-            'id' => 'wordfence/wordfence.php',
-            'name' => 'Wordfence',
-            'approved_constraints' => [
-                'is_installed' => true,
-                'is_active' => true,
-                'is_auto_update_enabled' => true
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('wordfence/wordfence.php', 'Wordfence')
-        ],
-        [
-            'id' => 'google-site-kit/google-site-kit.php',
-            'name' => 'Google Site Kit',
-            'approved_constraints' => [
-                'is_installed' => true,
-                'is_active' => true,
-                'is_auto_update_enabled' => true
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('google-site-kit/google-site-kit.php', 'Google Site Kit')
-        ],
-        [
             'id' => 'wp-mail-smtp/wp_mail_smtp.php',
             'name' => 'WP Mail SMTP',
             'approved_constraints' => [
@@ -350,16 +290,6 @@ function hws_ct_get_plugins_list() {
             ],
             'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('advanced-custom-fields-pro/acf.php', 'Advanced Custom Fields Pro', true)
         ],
-        [
-            'id' => 'wp-sweep/wp-sweep.php',
-            'name' => 'WP Sweep',
-            'approved_constraints' => [
-                'is_installed' => true,
-                'is_active' => false,  // WP Sweep should not be active
-                'is_auto_update_enabled' => true
-            ],
-            'additional_info' => hws_ct_plugin_info_determine_plugin_download_message('wp-sweep/wp-sweep.php', 'WP Sweep')
-        ]
     ];
 }
 

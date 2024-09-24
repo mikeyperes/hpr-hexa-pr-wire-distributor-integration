@@ -11,6 +11,14 @@ use function hpr_distributor\toggle_snippet;
 use function hpr_distributor\hws_ct_get_settings_snippets;
  
 
+function enable_press_release_category_on_new_post()
+{
+
+    // Hook into 'wp_insert_post' to apply the changes when a new post is created
+    add_action('wp_insert_post', __NAMESPACE__ . '\\set_default_press_release_category_on_new', 10, 1);
+}
+
+
 if (!function_exists('hpr_distributor\toggle_snippet')) {
     function toggle_snippet() {
         $settings_snippets = hws_ct_get_settings_snippets();

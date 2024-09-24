@@ -1,8 +1,7 @@
 <?php namespace hpr_distributor;
 
 function register_press_release_post_type()
-{
-write_log("REGISTER RESS RELASE POST TYPE",true);
+{  
 	register_post_type( 'press-release', array(
 	'labels' => array(
 		'name' => 'Press Releases',
@@ -56,7 +55,7 @@ write_log("REGISTER RESS RELASE POST TYPE",true);
 	),
 	'delete_with_user' => false,
 ) );
-
+  
 }
 function register_press_release_custom_fields(){
 	
@@ -181,7 +180,7 @@ function register_press_release_custom_fields(){
                         'placeholder' => '',
                         'prepend' => '',
                         'append' => '',
-                    ),
+                    ), 
                     array(
                         'key' => 'field_658a07ed9760e',
                         'label' => 'ID',

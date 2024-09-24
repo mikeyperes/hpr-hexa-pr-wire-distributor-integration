@@ -4,7 +4,7 @@ Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
 Author: Michael Peres
 Plugin URI: https://github.com/mikeyperes/hws-base-tools
-Version: 1.0
+Version: 1.1
 Author URI: https://michaelperes.com
 GitHub Plugin URI: https://github.com/mikeyperes/hws-base-tools/
 GitHub Branch: main 
@@ -103,6 +103,22 @@ function hws_ct_get_settings_snippets()
 {
     $settings_snippets = [
         [
+            'name' => 'Enable Author Social ACFs',
+            'id' => 'register_user_custom_fields',
+            'function' => 'register_user_custom_fields',
+            'description' => 'This will enable social media fields in author profiles.',
+            'info' => implode('<br>', array_map(function($field) {
+                if ($field['type'] === 'group') {
+                    $sub_fields = implode(', ', array_map(function($sub_field) {
+                        return "{$sub_field['name']}";
+                    }, $field['sub_fields']));
+                    return "{$field['name']}<br>&emsp;{$sub_fields}";
+                } else {
+                    return "{$field['name']}";
+                }
+            }, acf_get_fields('group_590d64c31db0a')))
+        ],
+        [
             'id' => 'enable_comments_management',
             'name' => 'Enable Comments Functionality',
             'description' => '',
@@ -115,6 +131,13 @@ function hws_ct_get_settings_snippets()
             'description' => 'Enable the custom RSS feed functionality based on registered post types and categories.',
             'info' => 'Once this is selected, custom RSS feeds will be generated for the specified post types and categories defined in the ACF settings.',
             'function' => 'enable_custom_rss_functionality'
+        ],
+        [
+            'id' => 'enable_press_release_category_on_new_post',
+            'name' => 'Enable Press Release category on new post',
+            'description' => '',
+            'info' => '',
+            'function' => 'enable_press_release_category_on_new_post'
         ],
         /*
         [
@@ -220,6 +243,7 @@ function hws_ct_get_settings_snippets()
 add_action('acf/init', function() {
     // Register ACF Fields
     include_once("register-acf-press-release.php");
+    include_once("register-acf-user.php");
     // Build Dashboard
     include_once("settings-dashboard-snippets.php");
     include_once("settings-dashboard-system-checks.php");
@@ -228,6 +252,8 @@ add_action('acf/init', function() {
 
     include_once("settings-event-handling.php");
    // include_once("settings-dashboard.php");
+   include_once("settings-action-create-hexa-pr-wire-user.php");
+   
 
    include_once("activate-snippets.php");
 });
