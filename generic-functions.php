@@ -443,7 +443,7 @@ function check_if_user_hexa_pr_wire_exists() {
         $report .= "Logo: <img src='$user_avatar' style='width:50px;height:50px;' alt='User Logo'><br>";
         $report .= "Number of Posts: $post_count<br>";
 
-        write_log("Hexa PR Wire user found, reporting information", false;
+        write_log("Hexa PR Wire user found, reporting information", false);
         return [
             'function' => 'check_if_user_hexa_pr_wire_exists',
             'status' => true, // User exists
