@@ -4,7 +4,7 @@ Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
 Author: Michael Peres
 Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor
-Version: 1.2
+Version: 1.2.1
 Author URI: https://michaelperes.com
 GitHub Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor/
 GitHub Branch: main 
