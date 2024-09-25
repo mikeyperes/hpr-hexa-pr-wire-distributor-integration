@@ -11,7 +11,7 @@ function activate_listeners()
 {?>
 <script>
 jQuery(document).ready(function($) {
-    $('.modify-wp-config').on('click', function(e) {
+    $('#dashboard-hpr-distributor .modify-wp-config').on('click', function(e) {
         e.preventDefault();
 
         const constant = $(this).data('constant');
@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
   <script type="text/javascript">
         jQuery(document).ready(function($) {
             // Event handler for enabling auto-updates for all plugins
-            $('#enable-plugin-auto-updates').on('click', function(e) {
+            $('#dashboard-hpr-distributor #enable-plugin-auto-updates').on('click', function(e) {
                 e.preventDefault();
 
                 $.post(ajaxurl, {
@@ -62,7 +62,7 @@ jQuery(document).ready(function($) {
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             // Event handler for enabling WP Core auto-updates
-            $('#enable-auto-updates').on('click', function(e) {
+            $('#dashboard-hpr-distributor #enable-auto-updates').on('click', function(e) {
                 e.preventDefault();
 
                 $.post(ajaxurl, {
@@ -86,7 +86,7 @@ jQuery(document).ready(function($) {
 
     <script type="text/javascript">
         jQuery(document).ready(function($) {
-            $('.fix-ram-issue').on('click', function(e) {
+            $('#dashboard-hpr-distributor .fix-ram-issue').on('click', function(e) {
                 e.preventDefault();
 
                 $.post(ajaxurl, {
@@ -120,8 +120,8 @@ jQuery(document).ready(function($) {
 $ = jQuery;
 $(document).ready(function($) {
     // Handle click event and AJAX request all in one function
-    $('.execute-function').on('click', function() {
-        alert("clickedd...");
+    $('#dashboard-hpr-distributor .execute-function').on('click', function() {
+
         var methodName = $(this).data('method');  // Get the method name
         var state = $(this).data('state');  // Get the state
         var setting = $(this).data('setting');  // Get the setting name

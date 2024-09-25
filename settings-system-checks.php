@@ -365,7 +365,7 @@ if ($wp_cache_status === 'true' || $wp_cache_status === true): ?>
     <script>
 
 jQuery(document).ready(function($) {
-    $('.modify-wp-config').on('click', function(e) {
+    $('#dashboard-hpr-distributor .modify-wp-config').on('click', function(e) {
         e.preventDefault();
 
         const constant = $(this).data('constant');
@@ -406,7 +406,7 @@ jQuery(document).ready(function($) {
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             // Event handler for enabling auto-updates for all plugins
-            $('#enable-plugin-auto-updates').on('click', function(e) {
+            $('#dashboard-hpr-distributor #enable-plugin-auto-updates').on('click', function(e) {
                 e.preventDefault();
 
                 $.post(ajaxurl, {
@@ -428,7 +428,7 @@ jQuery(document).ready(function($) {
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             // Event handler for enabling WP Core auto-updates
-            $('#enable-auto-updates').on('click', function(e) {
+            $('#dashboard-hpr-distributor #enable-auto-updates').on('click', function(e) {
                 e.preventDefault();
 
                 $.post(ajaxurl, {
@@ -449,36 +449,6 @@ jQuery(document).ready(function($) {
             });
         });
     </script>
-
-    <script type="text/javascript">
-        jQuery(document).ready(function($) {
-            $('.fix-ram-issue').on('click', function(e) {
-                e.preventDefault();
-
-                $.post(ajaxurl, {
-                    action: 'modify_wp_config_constants',  // This needs to match the action hook in your PHP code
-                    constants: {
-                        'WP_MEMORY_LIMIT': '4000M' // Adding the constant to update
-                    }
-                }, function(response) {
-                    console.log('Raw AJAX Response:', response); // Log the entire response
-                    console.log('Data Object:', response.data);   // Log the data object to see what's inside
-
-                    var message = response.data ? response.data.message : 'No message received';
-
-                    if (response.success) {
-                        alert(message);
-                        location.reload();
-                    } else {
-                        alert(message);
-                    }
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    alert('AJAX request failed: ' + textStatus + ', ' + errorThrown);
-                    console.error('AJAX Request Failed:', jqXHR, textStatus, errorThrown); // Debugging: Log the failure details
-                });
-            });
-        });
-    </script> 
     <?php
     
 

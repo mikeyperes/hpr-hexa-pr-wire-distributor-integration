@@ -138,7 +138,7 @@ pre {
 }
 </style>
 
-<div class="wrap">
+<div class="wrap" id="dashboard-hpr-distributor">
 <h1><?php echo Config::$settings_page_display_title;?></h1>
 <?php display_settings_system_checks();?>
 <?php display_settings_check_plugins();?>
