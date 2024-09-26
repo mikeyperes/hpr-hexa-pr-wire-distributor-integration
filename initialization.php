@@ -127,6 +127,13 @@ function hws_ct_get_settings_snippets()
             }, acf_get_fields('group_590d64c31db0a')))
         ],
         [
+            'id' => 'enable_hpr_auto_deletes',
+            'name' => 'Enable Hexa PR Wire Auto Delete functionality',
+            'description' => '',
+            'info' => '',
+            'function' => 'enable_hpr_auto_deletes'
+        ],
+        [
             'id' => 'enable_comments_management',
             'name' => 'Enable Comments Functionality',
             'description' => '',
@@ -249,9 +256,14 @@ function hws_ct_get_settings_snippets()
 
 // Hook to acf/init to ensure ACF is initialized before running any ACF-related code
 add_action('acf/init', function() {
+
+
+
     // Register ACF Fields
     include_once("register-acf-press-release.php");
     include_once("register-acf-user.php");
+    // Import Snippets 
+    include_once("snippet-auto-delete.php");
     // Build Dashboards
     include_once("settings-dashboard-overview.php");
     include_once("settings-dashboard-plugin-info.php");

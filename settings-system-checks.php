@@ -40,7 +40,10 @@ function hws_ct_get_settings_system_checks()
         perform_comments_system_check() // Calls the function that checks the comment statuses
     ),
 ],*/
-
+'Check Hexa PR Wire Auto Delete Status' => [
+    'id' => 'hexa-pr-wire-auto-delete-cron',
+    'value' => hws_ct_highlight_based_on_criteria(check_if_user_hexa_pr_wire_exists()) 
+],
         'WordPress Admin Email' => [
             'id' => 'wp-main-email',
             'value' => hws_ct_highlight_based_on_criteria(check_wordpress_main_email()) . 
