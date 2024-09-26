@@ -4,7 +4,7 @@ Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
 Author: Michael Peres
 Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor
-Version: 1.2.4
+Version: 1.2.5
 Author URI: https://michaelperes.com
 GitHub Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor/
 GitHub Branch: main 
@@ -126,6 +126,16 @@ function hws_ct_get_settings_snippets()
                 }
             }, acf_get_fields('group_590d64c31db0a')))
         ],
+
+        
+        [
+            'id' => 'add_press_release_to_author_page',
+            'name' => 'Add press-release post type to author page',
+            'description' => '',
+            'info' => '',
+            'function' => 'add_press_release_to_author_page'
+        ],
+
         [
             'id' => 'enable_hpr_auto_deletes',
             'name' => 'Enable Hexa PR Wire Auto Delete functionality',
@@ -263,6 +273,8 @@ add_action('acf/init', function() {
     include_once("register-acf-press-release.php");
     include_once("register-acf-user.php");
     // Import Snippets 
+    
+    include_once("snippet-add-press-release-post-to-author.php");
     include_once("snippet-auto-delete.php");
     // Build Dashboards
     include_once("settings-dashboard-overview.php");
