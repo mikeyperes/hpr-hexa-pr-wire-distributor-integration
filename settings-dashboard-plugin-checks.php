@@ -2,6 +2,7 @@
 
 // Import functions from the hws_base_tools namespace
 
+
  
 function display_settings_check_plugins() {
    // Get the last time WordPress checked for plugin updates
