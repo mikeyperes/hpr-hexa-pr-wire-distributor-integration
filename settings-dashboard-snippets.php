@@ -8,7 +8,7 @@ use function hpr_distributor\disable_litespeed_js_combine;
 use function hpr_distributor\hws_ct_snippets_activate_author_social_acfs;
 use function hpr_distributor\write_log;
 use function hpr_distributor\toggle_snippet;
-use function hpr_distributor\hws_ct_get_settings_snippets;
+use function hpr_distributor\get_settings_snippets;
  
 
 function enable_press_release_category_on_new_post()
@@ -18,65 +18,6 @@ function enable_press_release_category_on_new_post()
     add_action('wp_insert_post', __NAMESPACE__ . '\\set_default_press_release_category_on_new', 10, 1);
 }
 
-
-if (!function_exists('hpr_distributor\toggle_snippet')) {
-    function toggle_snippet() {
-        $settings_snippets = hws_ct_get_settings_snippets();
-
-        // Retrieve the snippet ID and the enable/disable state from the AJAX request
-        $snippet_id = sanitize_text_field($_POST['snippet_id']);
-        $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
-
-        write_log("Toggle snippet called with ID: {$snippet_id}, enable: " . ($enable ? 'true' : 'false'));
-
-        // Find the corresponding snippet and function
-        foreach ($settings_snippets as $snippet) {
-            if ($snippet['id'] === $snippet_id) {
-                // Get the current value from the database
-                $current_value = get_option($snippet_id);
-                write_log("Current value of '{$snippet_id}': " . var_export($current_value, true));
-
-                // Ensure both current and new values are booleans for accurate comparison
-                $current_value_bool = filter_var($current_value, FILTER_VALIDATE_BOOLEAN);
-
-                // Only update if the value has actually changed
-                if ($current_value_bool !== $enable) {
-                    write_log("Attempting to update '{$snippet_id}' to " . ($enable ? 'true' : 'false'));
-
-                    // Attempt the update
-                    $updated = update_option($snippet_id, $enable);
-
-                    // Log the result of the update attempt
-                    if ($updated) {
-                        write_log("Option '{$snippet_id}' updated successfully.");
-                        wp_send_json_success("Option '{$snippet_id}' updated successfully.");
-                    } else {
-                        global $wpdb;
-                        $db_error = $wpdb->last_error;
-                        write_log("Failed to update option '{$snippet_id}'. Database error: {$db_error}");
-                        wp_send_json_error("Failed to update option '{$snippet_id}'. Database error: {$db_error}");
-                    }
-                } else {
-                    write_log("No update required for '{$snippet_id}'. Current value is the same as the new value.");
-                    wp_send_json_error("No update required for '{$snippet_id}'. Current value is the same.");
-                }
-
-                exit; // Stop further processing once the correct snippet is found
-            }
-        }
-
-        write_log("Invalid snippet ID: {$snippet_id}");
-        wp_send_json_error("Invalid snippet ID: {$snippet_id}");
-
-        wp_die(); // Ensure proper termination of the script
-    }
-} else {
-    write_log("Warning: hpr_distributor/toggle_snippet function is already declared", true);
-}
-
-
-
-    add_action('wp_ajax_toggle_snippet', 'hpr_distributor\toggle_snippet');
 
     function display_settings_snippets() {
         add_action('admin_init', 'acf_form_init');

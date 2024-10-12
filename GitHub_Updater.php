@@ -38,25 +38,28 @@ class WP_GitHub_Updater {
 	 * @see has_minimum_config()
 	 * @return void
 	 */
-	public function __construct( $config = array() ) {
 
+
+
+
+	public function __construct( $config = array() ) {
+		
 		$defaults = array(
 			'slug' => plugin_basename( __FILE__ ),
 			'proper_folder_name' => dirname( plugin_basename( __FILE__ ) ),
 			'sslverify' => true,
 			'access_token' => '',
 		);
-
+		
 		$this->config = wp_parse_args( $config, $defaults );
 
-		// if the minimum config isn't set, issue a warning and bail
+		// Rest of the constructor
 		if ( ! $this->has_minimum_config() ) {
 			$message = 'The GitHub Updater was initialized without the minimum required configuration, please check the config in your plugin. The following params are missing: ';
 			$message .= implode( ',', $this->missing_config );
 			_doing_it_wrong( __CLASS__, $message , self::VERSION );
 			return;
 		}
-
 		$this->set_defaults();
 
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'api_check' ) );

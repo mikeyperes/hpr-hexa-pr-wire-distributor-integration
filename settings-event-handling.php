@@ -3,9 +3,13 @@
 // Hook to load custom JavaScript in wp-admin head
 add_action('admin_head', __NAMESPACE__ . '\\activate_listeners');
 
-add_action('wp_ajax_modify_wp_config_constants',  __NAMESPACE__ . '\\modify_wp_config_constants_handler');    
-add_action('wp_ajax_execute_function',  __NAMESPACE__ . '\\handle_execute_function_ajax');
-add_action('wp_ajax_nopriv_execute_function',  __NAMESPACE__ . '\\handle_execute_function_ajax');  // For non-logged in users (optional)
+add_action('wp_ajax_'.__NAMESPACE__.'_modify_wp_config_constants',  __NAMESPACE__ . '\\modify_wp_config_constants_handler');    
+add_action('wp_ajax_'.__NAMESPACE__.'_execute_function',  __NAMESPACE__ . '\\handle_execute_function_ajax');
+add_action('wp_ajax_nopriv_'.__NAMESPACE__.'_execute_function',  __NAMESPACE__ . '\\handle_execute_function_ajax');  // For non-logged in users (optional)
+add_action('wp_ajax_'.__NAMESPACE__.'_toggle_snippet',   __NAMESPACE__ . '\\toggle_snippet');
+
+
+
 
 function activate_listeners()
 {?>
@@ -19,7 +23,7 @@ jQuery(document).ready(function($) {
         const target = $(this).data('target');
 
         $.post(ajaxurl, {
-            action: 'modify_wp_config_constants',
+            action: 'hpr_modify_wp_config_constants',
             constants: {
                 [constant]: value
             }
@@ -176,6 +180,64 @@ $(document).ready(function($) {
 
 
 <?php }
+
+
+if (!function_exists('hpr_distributor\toggle_snippet')) {
+    function toggle_snippet() {
+        $settings_snippets = hws_ct_get_settings_snippets();
+
+        // Retrieve the snippet ID and the enable/disable state from the AJAX request
+        $snippet_id = sanitize_text_field($_POST['snippet_id']);
+        $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
+
+        write_log("Toggle snippet called with ID: {$snippet_id}, enable: " . ($enable ? 'true' : 'false'));
+
+        // Find the corresponding snippet and function
+        foreach ($settings_snippets as $snippet) {
+            if ($snippet['id'] === $snippet_id) {
+                // Get the current value from the database
+                $current_value = get_option($snippet_id);
+                write_log("Current value of '{$snippet_id}': " . var_export($current_value, true));
+
+                // Ensure both current and new values are booleans for accurate comparison
+                $current_value_bool = filter_var($current_value, FILTER_VALIDATE_BOOLEAN);
+
+                // Only update if the value has actually changed
+                if ($current_value_bool !== $enable) {
+                    write_log("Attempting to update '{$snippet_id}' to " . ($enable ? 'true' : 'false'));
+
+                    // Attempt the update
+                    $updated = update_option($snippet_id, $enable);
+
+                    // Log the result of the update attempt
+                    if ($updated) {
+                        write_log("Option '{$snippet_id}' updated successfully.");
+                        wp_send_json_success("Option '{$snippet_id}' updated successfully.");
+                    } else {
+                        global $wpdb;
+                        $db_error = $wpdb->last_error;
+                        write_log("Failed to update option '{$snippet_id}'. Database error: {$db_error}");
+                        wp_send_json_error("Failed to update option '{$snippet_id}'. Database error: {$db_error}");
+                    }
+                } else {
+                    write_log("No update required for '{$snippet_id}'. Current value is the same as the new value.");
+                    wp_send_json_error("No update required for '{$snippet_id}'. Current value is the same.");
+                }
+
+                exit; // Stop further processing once the correct snippet is found
+            }
+        }
+
+        write_log("Invalid snippet ID: {$snippet_id}");
+        wp_send_json_error("Invalid snippet ID: {$snippet_id}");
+
+        wp_die(); // Ensure proper termination of the script
+    }
+} else {
+    write_log("Warning: hpr_distributor/toggle_snippet function is already declared", true);
+}
+
+
 
 function modify_wp_config_constants_handler() {
     if (!current_user_can('manage_options')) {

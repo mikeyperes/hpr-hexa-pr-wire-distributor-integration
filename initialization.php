@@ -4,7 +4,7 @@ Plugin Name: Hexa PR Wire - Distributor
 Description: Basic tools for optimization, performance, and debugging on Hexa-based web systems.
 Author: Michael Peres
 Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor
-Version: 1.2.5
+Version: 1.3
 Author URI: https://michaelperes.com
 GitHub Plugin URI: https://github.com/mikeyperes/hexa-pr-wire-distributor/
 GitHub Branch: main 
@@ -77,7 +77,6 @@ if (is_admin()) { // Ensure this runs only in the admin area
 
 // Array of plugins to check
 $plugins_to_check = [
-    'advanced-custom-fields/acf.php',
     'advanced-custom-fields-pro/acf.php',
     'advanced-custom-fields-pro-temp/acf.php'
 ];
@@ -150,13 +149,7 @@ function hws_ct_get_settings_snippets()
             'info' => '',
             'function' => 'enable_comments_management'
         ],
-        [
-            'id' => 'enable_custom_rss_functionality',
-            'name' => 'Enable Custom RSS Functionality',
-            'description' => 'Enable the custom RSS feed functionality based on registered post types and categories.',
-            'info' => 'Once this is selected, custom RSS feeds will be generated for the specified post types and categories defined in the ACF settings.',
-            'function' => 'enable_custom_rss_functionality'
-        ],
+   
         [
             'id' => 'enable_press_release_category_on_new_post',
             'name' => 'Enable Press Release category on new post',
@@ -165,6 +158,14 @@ function hws_ct_get_settings_snippets()
             'function' => 'enable_press_release_category_on_new_post'
         ],
         /*
+             [
+            'id' => 'enable_custom_rss_functionality',
+            'name' => 'Enable Custom RSS Functionality',
+            'description' => 'Enable the custom RSS feed functionality based on registered post types and categories.',
+            'info' => 'Once this is selected, custom RSS feeds will be generated for the specified post types and categories defined in the ACF settings.',
+            'function' => 'enable_custom_rss_functionality'
+        ],
+
         [
             'id' => 'disable_wordpress_comments_forward',
             'name' => 'Disable WordPress Comments',

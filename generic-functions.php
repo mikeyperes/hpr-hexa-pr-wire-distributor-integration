@@ -354,6 +354,9 @@ if (!function_exists(__NAMESPACE__ . '\\create_wordpress_user')) {
 
 
 
+
+
+if (!function_exists(__NAMESPACE__ . '\\hws_ct_highlight_based_on_criteria')) {
 function hws_ct_highlight_based_on_criteria($setting, $fail_criteria = null) {
 
     // Initialize the value
@@ -373,7 +376,8 @@ function hws_ct_highlight_based_on_criteria($setting, $fail_criteria = null) {
         }
     
         return $raw_value;
-    }
+}} else write_log("⚠️ Warning: " . __NAMESPACE__ . "\\hws_ct_highlight_based_on_criteria function is already declared", true);
+
 
 
 
@@ -388,7 +392,7 @@ if (!function_exists('hws_ct_highlight_if_essential_setting_failed')) {
 
 function create_hexa_pr_wire_user(){
     $params = array(
-        'slug' => 'hexa-pr-wire',
+        'slug' => 'hexaprwire',
         'first_name' => 'Hexa',
         'last_name' => 'PR Wire',
         'email' => 'info@hexaprwire.com',
@@ -531,4 +535,40 @@ if (!function_exists(__NAMESPACE__ . '\\set_default_press_release_category_on_ne
         write_log("Preselected 'press-release' category and removed 'Uncategorized' for post ID $post_ID.", false);
     }
 
-}?>
+}
+
+if (!function_exists(__NAMESPACE__ . '\\add_post_type_to_archive')) {
+function add_post_type_to_archive( $post_type ) {
+    add_action( 'pre_get_posts', function( $query ) use ( $post_type ) {
+        if ( ! is_admin() && $query->is_main_query() && is_author() ) {
+            // Get the current post types in the query
+            $post_types = $query->get('post_type');
+            
+            // Default to 'post' if no post type is set
+            if ( empty( $post_types ) ) {
+                $post_types = array( 'post' );
+            }
+
+            // Ensure post types is an array
+            if ( ! is_array( $post_types ) ) {
+                $post_types = array( $post_types );
+            }
+
+            // Add the custom post type
+            $post_types[] = $post_type;
+            $query->set( 'post_type', $post_types );
+        }
+    });
+}} else write_log("⚠️ Warning: " . __NAMESPACE__ . "\\add_post_type_to_archive function is already declared", true);
+
+
+
+
+
+if (!function_exists(__NAMESPACE__ . '\\add_press_release_to_author_page')) {
+function add_press_release_to_author_page(){
+add_post_type_to_archive( 'press-release' );
+}} else write_log("⚠️ Warning: " . __NAMESPACE__ . "\\add_press_release_to_author_page function is already declared", true);
+
+
+?>
