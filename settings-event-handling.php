@@ -14,6 +14,37 @@ add_action('wp_ajax_'.__NAMESPACE__.'_toggle_snippet',   __NAMESPACE__ . '\\togg
 function activate_listeners()
 {?>
 <script>
+
+
+
+function toggleSnippet(snippetId) {
+        var isChecked = jQuery('#' + snippetId).prop('checked');
+
+        // Make an AJAX call to toggle the snippet
+        jQuery.ajax({
+            url: ajaxurl,  // Ensure ajaxurl is set correctly
+            type: 'post',
+            data: {
+                action: '<?php echo __NAMESPACE__; ?>_toggle_snippet',
+                snippet_id: snippetId,
+                enable: isChecked
+            },
+            success: function(response) {
+                if(response.success) { 
+                    alert(response.data);
+                } else {
+                    alert('Error: ' + response.data);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('AJAX Error:', textStatus, errorThrown, jqXHR.responseText);
+                alert('An AJAX error occurred: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+  
+
+
 jQuery(document).ready(function($) {
     $('#dashboard-hpr-distributor .modify-wp-config').on('click', function(e) {
         e.preventDefault();
@@ -182,7 +213,7 @@ $(document).ready(function($) {
 <?php }
 
 
-if (!function_exists('hpr_distributor\toggle_snippet')) {
+if (!function_exists(__NAMESPACE__.'\toggle_snippet')) {
     function toggle_snippet() {
         $settings_snippets = hws_ct_get_settings_snippets();
 
@@ -233,9 +264,7 @@ if (!function_exists('hpr_distributor\toggle_snippet')) {
 
         wp_die(); // Ensure proper termination of the script
     }
-} else {
-    write_log("Warning: hpr_distributor/toggle_snippet function is already declared", true);
-}
+} else write_log("Warning: ".__NAMESPACE__."/toggle_snippet function is already declared", true);
 
 
 
