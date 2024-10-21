@@ -1,14 +1,5 @@
 <?php namespace hpr_distributor;
 
-use function hpr_distributor\disable_rankmath_sitemap_caching;
-use function hpr_distributor\enable_auto_update_plugins;
-use function hpr_distributor\enable_auto_update_themes;
-use function hpr_distributor\custom_wp_admin_logo;
-use function hpr_distributor\disable_litespeed_js_combine;
-use function hpr_distributor\hws_ct_snippets_activate_author_social_acfs;
-use function hpr_distributor\write_log;
-use function hpr_distributor\toggle_snippet;
-use function hpr_distributor\get_settings_snippets;
  
 
 function enable_press_release_category_on_new_post()
@@ -95,7 +86,7 @@ function enable_press_release_category_on_new_post()
                     <?php
                     // Initialize an array to store active snippets
                     $active_snippets = [];
-                    $settings_snippets = hws_ct_get_settings_snippets();
+                    $settings_snippets = get_settings_snippets();
     
                     // Iterate through the snippets and check which ones are active
                     foreach ($settings_snippets as $snippet) {
@@ -136,7 +127,7 @@ foreach ($settings_snippets as $snippet) {
 
     // Display the checkbox and label with the info field included
     echo "<div style='color: #555; margin-bottom: 10px;'>
-            <input type='checkbox' id='{$snippet['id']}' onclick='toggleSnippet(\"{$snippet['id']}\")' $checked>
+        <input type='checkbox' id='{$snippet['id']}' onclick='window[namespace].toggleSnippet(\"{$snippet['id']}\")' $checked>
             <label for='{$snippet['id']}'>
                 {$snippet['name']} - <em>{$snippet['description']}</em>
                 <br>

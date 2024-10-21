@@ -3,7 +3,7 @@
  use hpr_distributor\WP_GitHub_Updater;
 
 
- function hws_ct_get_plugin_data() {
+ function hpr_get_plugin_data() {
     // Determine the main plugin file
     $plugin_file = __FILE__; // This should point to the current file
 
@@ -46,7 +46,7 @@ function display_plugin_info() {
 
    // Fetch the plugin data
   // $plugin_data = get_plugin_data($plugin_file);
-   $plugin_data = hws_ct_get_plugin_data();
+   $plugin_data = hpr_get_plugin_data();
    $slug = dirname(plugin_basename(__FILE__));
   
  

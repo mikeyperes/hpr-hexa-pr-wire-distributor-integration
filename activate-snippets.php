@@ -4,7 +4,7 @@ activate_snippets();
 
 function activate_snippets() {
 
-    $settings_snippets = hws_ct_get_settings_snippets();
+    $settings_snippets = get_settings_snippets();
     foreach ($settings_snippets as $snippet) {
         $snippet_id = $snippet['id'];
         $function_to_call = $snippet['function'];

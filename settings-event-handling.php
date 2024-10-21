@@ -17,32 +17,39 @@ function activate_listeners()
 
 
 
-function toggleSnippet(snippetId) {
-        var isChecked = jQuery('#' + snippetId).prop('checked');
+  // Dynamically assign the namespace from PHP to a JS variable
+  var namespace = '<?php echo __NAMESPACE__; ?>';  // Pass the PHP namespace to JS
 
-        // Make an AJAX call to toggle the snippet
-        jQuery.ajax({
-            url: ajaxurl,  // Ensure ajaxurl is set correctly
-            type: 'post',
-            data: {
-                action: '<?php echo __NAMESPACE__; ?>_toggle_snippet',
-                snippet_id: snippetId,
-                enable: isChecked
-            },
-            success: function(response) {
-                if(response.success) { 
-                    alert(response.data);
-                } else {
-                    alert('Error: ' + response.data);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log('AJAX Error:', textStatus, errorThrown, jqXHR.responseText);
-                alert('An AJAX error occurred: ' + textStatus + ' - ' + errorThrown);
+// Create the JS namespace if it doesn't exist
+window[namespace] = window[namespace] || {};
+
+// Wrap toggleSnippet inside the dynamic namespace
+window[namespace].toggleSnippet = function(snippetId) {
+    var isChecked = jQuery('#' + snippetId).prop('checked');
+
+    // Make an AJAX call to toggle the snippet
+    jQuery.ajax({
+        url: ajaxurl,  // Ensure ajaxurl is set correctly
+        type: 'post',
+        data: {
+            action: namespace + '_toggle_snippet',  // Dynamic action based on the namespace
+            snippet_id: snippetId,
+            enable: isChecked
+        },
+        success: function(response) {
+            if (response.success) {
+                alert(response.data);
+            } else {
+                alert('Error: ' + response.data);
             }
-        });
-    }
-  
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('AJAX Error:', textStatus, errorThrown, jqXHR.responseText);
+            alert('An AJAX error occurred: ' + textStatus + ' - ' + errorThrown);
+        }
+    });
+};
+
 
 
 jQuery(document).ready(function($) {
@@ -215,13 +222,13 @@ $(document).ready(function($) {
 
 if (!function_exists(__NAMESPACE__.'\toggle_snippet')) {
     function toggle_snippet() {
-        $settings_snippets = hws_ct_get_settings_snippets();
+        $settings_snippets = get_settings_snippets();
 
         // Retrieve the snippet ID and the enable/disable state from the AJAX request
         $snippet_id = sanitize_text_field($_POST['snippet_id']);
         $enable = filter_var($_POST['enable'], FILTER_VALIDATE_BOOLEAN);
 
-        write_log("Toggle snippet called with ID: {$snippet_id}, enable: " . ($enable ? 'true' : 'false'));
+        write_log("Toggle snippet called with ID: {$snippet_id}, enable: " . ($enable ? 'true' : 'false'),true);
 
         // Find the corresponding snippet and function
         foreach ($settings_snippets as $snippet) {
